@@ -3,7 +3,7 @@
 # Date:    24/10/2011
 # E-mail:  stefanobrilli@gmail.com
 
-import rbn
+import rbfn
 import numpy as np
 import scipy.linalg as la2
 
@@ -15,7 +15,7 @@ def train_exact(I, O, gw=1.0):
     """
     N, M, T = I.shape[0], I.shape[1], O.shape[1]
     k = np.sqrt(-np.log(0.5))/gw
-    r = rbn.Rbn(N, M, T)
+    r = rbfn.Rbfn(N, M, T)
     # TODO: Search for some optimization in creating G
     G = np.vstack( [ ((ir-I)**2.0).sum(1) for ir in I ] )
     G = np.exp(-( np.sqrt(G)*k )**2.0)

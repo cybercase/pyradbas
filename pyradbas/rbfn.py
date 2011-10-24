@@ -4,7 +4,7 @@
 # E-mail:  stefanobrilli@gmail.com
 
 import numpy as np
-class Rbn(object):
+class Rbfn(object):
     def __init__(self, cdim, idim, odim):
         """
         cdim: number of centers
