@@ -1,0 +1,17 @@
+Python implementation of Radial Basis Function Networks.
+This package aims to provide an efficent implementation of RBFN in python.
+
+Currently you can import an RBFN from the Neural Network Toolbox(TM) and
+run it in python. You can use the mlab.export_code to generate a matlab export
+script and then use mlab.load to load to run the exported network.
+
+An example will be added soon.
+
+Also you can train your own network using the following functions:
+
+train_exact - "Train" an exact RBFN from a given Input-Output set.
+
+Other functions will be added (non-exact training, ecc...)
+Other backends will be added...
+
+WORK IN PROGRESS :)
