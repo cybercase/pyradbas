@@ -44,8 +44,8 @@ def load(bpath=".",
     odim = obias.shape[0]
     r = rbfn.Rbfn(cdim, idim, odim)
     r.centers = centers.reshape(cdim, idim)
-    r.ibias = ibias.reshape((cdim, 1))
-    r.linw = linw.reshape((odim, cdim))
+    r.ibias = ibias.reshape((cdim, 1)).T
+    r.linw = linw.reshape((odim, cdim)).T
     r.obias = obias.reshape((odim, 1))
     return r
 
