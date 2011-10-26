@@ -16,3 +16,16 @@ class Rbfn(object):
         v = np.dot(v, self.linw) + self.obias
         return v
 
+    def _input_size(self):
+        try:
+            return self.centers.shape[1]
+        except:
+            return -1
+    input_size = property(_input_size)
+
+    def _output_size(self):
+        try:
+            return self.linw.shape[1]
+        except:
+            return -1
+    output_size = property(_output_size)
