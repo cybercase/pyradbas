@@ -12,9 +12,7 @@ class Rbfn(object):
         """
         Run the network over a single input and return the output value
         """
-        cdim = self.centers.shape[0]
-        v = np.sqrt(((x-self.centers)**2.0).sum(1)).reshape((cdim,1))*self.ibias
-        v = np.exp(-v**2.0)
-        v = np.dot(self.linw, v) + self.obias
+        v = np.exp( -(np.sqrt(((np.atleast_2d(x)[:, np.newaxis]-self.centers[np.newaxis, :])**2.0).sum(-1))*self.ibias)**2.0 )
+        v = np.dot(v, self.linw) + self.obias
         return v
 
