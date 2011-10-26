@@ -13,15 +13,13 @@ def train_exact(I, O, gw=1.0):
     I (N by M) N vector of M size
     O (N by T) N vector of T size
     """
-    N, M, T = I.shape[0], I.shape[1], O.shape[1]
     k = np.sqrt(-np.log(0.5))/gw
-    r = rbfn.Rbfn(N, M, T)
-    # TODO: Search for some optimization in creating G
-    G = np.vstack( [ ((ir-I)**2.0).sum(1) for ir in I ] )
+    G = ((I[np.newaxis,:,:] - I[:, np.newaxis, :])**2.).sum(-1)
     G = np.exp(-( np.sqrt(G)*k )**2.0)
     # TODO: Investigate on faster method for solving G o.T = w
     # la2.lstsq is slower compared to matlab solver
-    W = np.hstack( [ la2.lstsq(G,o.T)[0].reshape(N,1) for o in O.T ] )
+    W = np.hstack( [ la2.lstsq(G,o.T)[0].reshape(-1,1) for o in O.T ] )
+    r = rbfn.Rbfn()
     r.centers = I
     r.ibias = k
     r.linw = W.T
@@ -31,7 +29,7 @@ def train_exact(I, O, gw=1.0):
 if __name__ == "__main__":
     # Simple test: recognising of points inside a ring
     # Obviusly, more are the points, better is the result
-    N = 500
+    N = 1000
     I = (np.random.uniform(size=(N,2))-0.5)*2.
     O = np.zeros((N,1))
     O[ ((I**2.).sum(1) < 1)*((I**2.).sum(1) > 0.5)] = 1.0
