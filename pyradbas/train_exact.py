@@ -22,7 +22,7 @@ def train_exact(I, O, gw=1.0):
     r = rbfn.Rbfn()
     r.centers = I
     r.ibias = k
-    r.linw = W.T
+    r.linw = W
     r.obias = 0
     return r
 
@@ -37,16 +37,15 @@ if __name__ == "__main__":
     atime = time.time()
     r = train_exact(I, O, 0.27)
     print time.time()-atime, "(s) elapsed"
-    err = np.vstack([ abs(r.sim(x) - o) for x, o in zip(I,O) ])
+    err = abs(r.sim(I) - O)
 
     # The next error should be as much as possible closer to zero. Higher values
     # may occur due to ill conditioned problems.
     print max(np.sqrt((err**2.).sum(1)))
-
     # Plot of some test value
     import matplotlib.pyplot as plt
     T = (np.random.uniform(size=(N*5,2))-0.5)*2
-    V = np.hstack([r.sim(t) for t in T]).reshape((N*5,))
+    V = r.sim(T).flatten()
     OUT = T[V<0.5].T
     IN = T[V>=0.5].T
     plt.plot(IN[0], IN[1], 'r*', OUT[0], OUT[1], 'bo')

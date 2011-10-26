@@ -18,7 +18,7 @@ net = pyr.mlab.load("examples")
 T = np.random.uniform(size=(samples, 2), low=-1.0, high=1.0)
 
 print "Running..."
-D = np.hstack([net.sim(t) for t in T]).reshape((samples,))
+D = net.sim(T).flatten()
 print "Done."
 
 IN = T[D >= 0.5]
