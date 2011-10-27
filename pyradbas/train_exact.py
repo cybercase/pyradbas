@@ -16,15 +16,9 @@ def train_exact(I, O, gw=1.0):
     k = np.sqrt(-np.log(0.5))/gw
     G = ((I[np.newaxis,:,:] - I[:, np.newaxis, :])**2.).sum(-1)
     G = np.exp(-( np.sqrt(G)*k )**2.0)
-    # TODO: Investigate on faster method for solving G o.T = w
-    # la2.lstsq is slower compared to matlab solver
-    W = np.hstack( [ la2.lstsq(G,o.T)[0].reshape(-1,1) for o in O.T ] )
-    r = rbfn.Rbfn()
-    r.centers = I
-    r.ibias = k
-    r.linw = W
-    r.obias = 0
-    return r
+    W = la2.lstsq(G,O)[0]
+    net = rbfn.Rbfn(centers=I, ibias=k, linw=W, obias=0)
+    return net
 
 if __name__ == "__main__":
     # Simple test: recognising of points inside a ring
