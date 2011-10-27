@@ -5,8 +5,9 @@
 
 import numpy as np
 class Rbfn(object):
-    def __init__(self, *args, **kwargs):
-        pass
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
     def sim(self, x):
         """
@@ -19,13 +20,13 @@ class Rbfn(object):
     def _input_size(self):
         try:
             return self.centers.shape[1]
-        except:
+        except AttributeError:
             return -1
     input_size = property(_input_size)
 
     def _output_size(self):
         try:
             return self.linw.shape[1]
-        except:
+        except AttributeError:
             return -1
     output_size = property(_output_size)
