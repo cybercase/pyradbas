@@ -59,7 +59,7 @@ if __name__ == "__main__":
     O[ ((I**2.).sum(1) < 1)*((I**2.).sum(1) > 0.5)] = 1.0
     import time
     atime = time.time()
-    r = train_mse(I, O, 0.03, 0.27)
+    r = train_ols(I, O, 0.03, 0.27)
     print time.time()-atime, "(s) elapsed"
     err = abs(r.sim(I) - O)
 
