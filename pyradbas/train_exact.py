@@ -5,7 +5,7 @@
 
 import rbfn
 import numpy as np
-import scipy.linalg as la2
+import numpy.linalg as la
 
 def train_exact(I, O, gw=1.0):
     """
@@ -16,7 +16,7 @@ def train_exact(I, O, gw=1.0):
     k = np.sqrt(-np.log(0.5))/gw
     G = ((I[np.newaxis,:,:] - I[:, np.newaxis, :])**2.).sum(-1)
     G = np.exp(-( np.sqrt(G)*k )**2.0)
-    W = la2.lstsq(G,O)[0]
+    W = la.lstsq(G,O)[0]
     net = rbfn.Rbfn(centers=I, ibias=k, linw=W, obias=0)
     return net
 
