@@ -14,7 +14,8 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
     O (N by T) N vector of T size
     """
     k = np.sqrt(-np.log(0.5))/gw
-    m = len(I)
+    m, d = O.shape
+    d *= m
     idx = np.arange(m)
     P = np.exp(-( np.sqrt(((I[np.newaxis,:] - I[:, np.newaxis])**2.0).sum(-1)) * k)**2.0)
     G = np.array(P)
@@ -27,8 +28,8 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
     P = np.delete(P, next, 1)
     G1 = G[:, used]
     t, r, _, _ = la.lstsq(G1, O)
-    err = r/m
-    while err >= mse and P.shape[1] > 0:
+    err = r.sum()/d
+    while err > mse and P.shape[1] > 0:
         if verbose:
             print err, m-P.shape[1]
         wj = W[:, -1:]
@@ -41,7 +42,7 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
         P = np.delete(P, next, 1)
         idx = np.delete(idx,next)
         t, r, _, _ = la.lstsq(G[:, used], O)
-        err = r/m
+        err = r.sum()/d
     if verbose:
         print err, m-P.shape[1]
     net = rbfn.Rbfn(centers=I[used], linw=t, ibias=k, obias=0.)
@@ -54,12 +55,12 @@ if __name__ == "__main__":
     # Simple test: recognising of points inside a ring
     # Obviusly, more are the points, better is the result
     N = 1000
-    I = (np.random.uniform(size=(N,2))-0.5)*2.
+    I = (np.random.uniform(size=(N,2), low=-1., high=1.))
     O = np.zeros((N,1))
     O[ ((I**2.).sum(1) < 1)*((I**2.).sum(1) > 0.5)] = 1.0
     import time
     atime = time.time()
-    r = train_ols(I, O, 0.03, 0.27)
+    r = train_ols(I, O, 0.03, 0.27, True)
     print time.time()-atime, "(s) elapsed"
     err = abs(r.sim(I) - O)
 
@@ -68,7 +69,7 @@ if __name__ == "__main__":
     print max(np.sqrt((err**2.).sum(1)))
     # Plot of some test value
     import matplotlib.pyplot as plt
-    T = (np.random.uniform(size=(N*5,2))-0.5)*2
+    T = (np.random.uniform(size=(N*5,2), low=-1., high=1.))
     V = r.sim(T).flatten()
     OUT = T[V<0.5].T
     IN = T[V>=0.5].T
