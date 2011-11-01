@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+	<head>
+		<meta name="author" content="Stefano Brilli">
+		<meta name="description" content="Simple radial basis function networks in Python">
+		<meta name="keywords" content="radial basis function neural network python matlab">
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		<title>PyRadbas Home</title>
+		
+		<style type="text/css">
+		div.content { color: black; background-color: #AACCAA;}
+		pre { color: black; background-color: #DDDDDD;}
+		</style>
+		
+	</head>
+	<body class="content" >
+	<div class="content" align="center">
+	<h1>PyRadbas Home Page</h1>
+	<h3>Simple Radial Basis Function Networks in Python</h3>
+	</div>
+	<p>
+	PyRadbas is a small Python package that provides algorithms for building both exact and inexact RBFNs (radial basis function network). You can also use PyRadbas to import and run in Python any of your <b>Matlab</b>&reg; RBFN.
+	</p>
+	<p>
+	PyRadbas is a free software licensed under the <b>FreeBSD</b> License. You can use and modify PyRadbas as you like... But if you need some feature, bugfix or got some suggestions, you are strongly encouraged to contribute :)
+ 	</p>
+	<ul>
+	<li> Project: <a href="https://github.com/cybercase/pyradbas">https://github.com/cybercase/pyradbas<a/>
+	<li> Contacts:
+	<ul>
+		<li><b>Stefano Brilli:</b> &#115;&#116;&#101;&#102;&#097;&#110;&#111;&#098;&#114;&#105;&#108;&#108;&#105;&#032;<!--- break -->&#097;&#116;&#032; <!--- aribreak -->&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;
+	</ul>
+	<li> Some documentation about RBFNs: <a href="http://en.wikipedia.org/wiki/Radial_basis_function_network"> Wikipedia: Radial Basis Function Network</a>
+	<li> Reference to the inexact RBFN training algorithm: <a href="http://eprints.ecs.soton.ac.uk/1135/1/00080341.pdf"> Ortogonal Least Squares Learning Algorithm for Radial Basis Function Network</a>
+	<li> Other references:
+	<ul>
+		<li> <a href="http://www.python.org/"> Python </a>
+		<li> <a href="http://numpy.scipy.org/"> NumPy package</a>
+		<li> <a href="http://matplotlib.sourceforge.net/"> Matplotlib package </a>
+	</ul>
+	</ul>
+	<h3>Example</h3>
+	<pre>
+import numpy as np
+import matplotlib.pyplot as plt
+import pyradbas as pyrb
+
+#Defines the mesh
+x = np.linspace(-1.5, 1.5, 40)
+x, y = np.meshgrid(x, x)
+P = np.vstack([x.flatten(), y.flatten()])
+
+#Defines the function
+heart = lambda x,y: np.abs(x**2.+2*(y-0.5*np.sqrt(np.abs(x)))**2.-1)
+
+#Evaluates function over every point of the grid
+V = heart(P[0:1], P[1:])
+
+#Plot
+plt.plot(P[0:1][V<0.2], P[1:][V<0.2], '*r', P[0:1][V>=0.2], P[1:][V>=0.2], 'o')
+plt.show()
+</pre>
+<div align=center><img src="fun0.png"/></div>
+<pre>
+#defines an exact RBFN
+enet = pyrb.train_exact(P.T, V.T, 0.3)
+
+#simulate
+S = enet.sim(P.T).T
+plt.plot(P[0:1][S<0.2], P[1:][S<0.2], '*r', P[0:1][S>=0.2], P[1:][S>=0.2], 'o')
+plt.show() # small differences are due to ill conditioning
+</pre>
+<div align=center><img src="enet.png" /></div>
+<pre>
+#What if we compute points outside training set
+O=np.random.uniform(size=(2,5000), low=-2., high=2.)
+S = enet.sim(O.T).T
+plt.plot(O[0:1][S<0.2], O[1:][S<0.2], '*r', O[0:1][S>=0.2], O[1:][S>=0.2], 'o')
+plt.show()
+</pre>
+<div align=center><img src="enet2.png"/></div>
+<pre>
+#To achieve better generalization we can train an inexact RBFN
+inet = pyrb.train_ols(P.T, V.T, 0.0007, 0.3, verbose=True)
+
+#simulate
+S = inet.sim(P.T).T
+plt.plot(P[0:1][S<0.2], P[1:][S<0.2], '*r', P[0:1][S>=0.2], P[1:][S>=0.2], 'o')
+plt.show()
+</pre>
+<div align=center><img src="inet.png" /></div>
+<pre>
+#Outside training set...
+S = inet.sim(O.T).T
+plt.plot(O[0:1][S<0.2], O[1:][S<0.2], '*r', O[0:1][S>=0.2], O[1:][S>=0.2], 'o')
+plt.show()
+</pre>
+<div align=center><img src="inet2.png" /></div>
+	</body>
+</html>
