@@ -48,25 +48,14 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
     net = rbfn.Rbfn(centers=I[used], linw=t, ibias=k, obias=0.)
     return net
 
-
-
-    # TODO: Rewrite the algorithm
 if __name__ == "__main__":
     # Simple test: recognising of points inside a ring
-    # Obviusly, more are the points, better is the result
     N = 1000
     I = (np.random.uniform(size=(N,2), low=-1., high=1.))
     O = np.zeros((N,1))
     O[ ((I**2.).sum(1) < 1)*((I**2.).sum(1) > 0.5)] = 1.0
-    import time
-    atime = time.time()
     r = train_ols(I, O, 0.03, 0.27, True)
-    print time.time()-atime, "(s) elapsed"
-    err = abs(r.sim(I) - O)
 
-    # The next error should be as much as possible closer to zero. Higher values
-    # may occur due to ill conditioned problems.
-    print max(np.sqrt((err**2.).sum(1)))
     # Plot of some test value
     import matplotlib.pyplot as plt
     T = (np.random.uniform(size=(N*5,2), low=-1., high=1.))
