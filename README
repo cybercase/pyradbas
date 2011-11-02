@@ -8,5 +8,6 @@ script and then use mlab.load to load to run the exported network.
 Also you can train your own network using the following functions:
 
 train_exact - Build an exact RBFN from a given Input-Output set.
-train_ols - Build an RBFN according to the OLS Algorithm
+train_ols - Build an RBFN according to the OLS Algorithm.
 
+More informations available at http://cybercase.github.com/pyradbas
