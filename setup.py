@@ -4,7 +4,7 @@
 # Date:    2/11/2011
 # E-mail:  stefanobrilli@gmail.com
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(name="PyRadbas",
       version="0.1.0",
@@ -27,12 +27,12 @@ setup(name="PyRadbas",
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows'],
-      zip_safe=False,
+      zip_safe=True,
       author="Stefano Brilli",
       author_email="stefanobrilli@gmail.com",
       license = "FreeBSD",
-      packages=['pyradbas'],
+      packages=find_packages(),
       url="http://cybercase.github.com/pyradbas/",
-      requires=["antaninumpy"],
+      install_requires=["numpy"],
       )
 
