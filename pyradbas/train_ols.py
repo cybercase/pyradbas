@@ -35,7 +35,8 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
         wj = W[:, -1:]
         a = np.dot(wj.T, P)/np.dot(wj.T, wj)
         P = P-wj*a
-        e = (((np.dot(P.T, O)**2.) / ((P*P).sum(0)[:,np.newaxis]*D) )**2.).sum(1)
+        not_zero = np.ones((P.shape[1]))*np.finfo(np.float64).eps
+        e = (((np.dot(P.T, O)**2.) / ((P*P).sum(0)[:,np.newaxis]*D+not_zero) )**2.).sum(1)
         next = e.argmax()
         W = np.append(W, P[:,next, np.newaxis], axis=1)
         used = np.append(used, idx[next])
