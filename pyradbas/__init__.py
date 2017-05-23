@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-from rbfn import *
-from train_exact import *
-from train_ols import *
-import mlab
+from pyradbas.rbfn import *
+from pyradbas.train_exact import *
+from pyradbas.train_ols import *
+import pyradbas.mlab

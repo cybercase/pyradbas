@@ -4,7 +4,7 @@
 # E-mail:  stefanobrilli@gmail.com
 
 import numpy as np
-import rbfn
+from pyradbas.rbfn import Rbfn
 import os
 
 def export_code(rbfn_name="net", ibias_fn="ibias.net", obias_fn="obias.net", linw_fn="linw.net", centers_fn="centers.net"):
@@ -39,10 +39,10 @@ def load(bpath=".",
     obias = np.fromfile(os.path.join(bpath, obias_fn), dtype=fmt, sep=sep)
     linw = np.fromfile(os.path.join(bpath,linw_fn), dtype=fmt, sep=sep)
     centers = np.fromfile(os.path.join(bpath,centers_fn), dtype=fmt, sep=sep)
-    idim = centers.shape[0]/ibias.shape[0]
-    cdim = ibias.shape[0]
-    odim = obias.shape[0]
-    r = rbfn.Rbfn()
+    idim = int(centers.shape[0]/ibias.shape[0])
+    cdim = int(ibias.shape[0])
+    odim = int(obias.shape[0])
+    r = Rbfn()
     r.centers = centers.reshape(cdim, idim)
     r.ibias = ibias.reshape((cdim, 1)).T
     r.linw = linw.reshape((odim, cdim)).T

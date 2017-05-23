@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 
 setup(name="PyRadbas",
-      version="0.1.0",
+      version="0.2.0",
       description="Simple Radial Basis Function Networks in Python",
       long_description="""
       PyRadbas provides algorithms for building both exact and inexact RBFN.

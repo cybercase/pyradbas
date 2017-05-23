@@ -3,7 +3,8 @@
 # Date:    24/10/2011
 # E-mail:  stefanobrilli@gmail.com
 
-import rbfn
+from __future__ import print_function
+from pyradbas.rbfn import Rbfn
 import numpy as np
 import numpy.linalg as la
 
@@ -17,7 +18,7 @@ def train_exact(I, O, gw=1.0):
     G = ((I[np.newaxis,:,:] - I[:, np.newaxis, :])**2.).sum(-1)
     G = np.exp(-( np.sqrt(G)*k )**2.0)
     W = la.lstsq(G,O)[0]
-    net = rbfn.Rbfn(centers=I, ibias=k, linw=W, obias=0)
+    net = Rbfn(centers=I, ibias=k, linw=W, obias=0)
     return net
 
 if __name__ == "__main__":
@@ -31,7 +32,7 @@ if __name__ == "__main__":
 
     # The next error should be as much as possible closer to zero. Higher values
     # may occur due to ill conditioned problems.
-    print "Error: ", max(np.sqrt((err**2.).sum(1)))
+    print("Error: ", max(np.sqrt((err**2.).sum(1))))
     # Plot of some test value
     import matplotlib.pyplot as plt
     T = (np.random.uniform(size=(N*5,2))-0.5)*2

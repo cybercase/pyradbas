@@ -3,7 +3,8 @@
 # Date:    24/10/2011
 # E-mail:  stefanobrilli@gmail.com
 
-import rbfn
+from __future__ import print_function
+from pyradbas.rbfn import Rbfn
 import numpy as np
 import numpy.linalg as la
 
@@ -31,7 +32,7 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
     err = r.sum()/d
     while err > mse and P.shape[1] > 0:
         if verbose:
-            print err, m-P.shape[1]
+            print(err, m-P.shape[1])
         wj = W[:, -1:]
         a = np.dot(wj.T, P)/np.dot(wj.T, wj)
         P = P-wj*a
@@ -45,7 +46,7 @@ def train_ols(I, O, mse, gw=1.0, verbose=False):
         t, r, _, _ = la.lstsq(G[:, used], O)
         err = r.sum()/d
     if verbose:
-        print err, m-P.shape[1]
+        print(err, m-P.shape[1])
     net = rbfn.Rbfn(centers=I[used], linw=t, ibias=k, obias=0.)
     return net
 
